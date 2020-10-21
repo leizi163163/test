@@ -1,4 +1,5 @@
 #include "stm32f10x.h"
+#include "shell_port.h"
 
 uint8_t AntSwitchState = 0;					//默认关闭天线发射
 uint8_t AntSwitchCloseFlag = 0;				//天线关闭标志位,RSU当前正处于交易或标识流程时,收到了关闭天线命令,可交易完成后再关闭天线.
@@ -22,7 +23,6 @@ uint8_t PC_ReceivedFlag = 0;
 
 
 const uint8_t HeartTAB[8] = {0x88,0xB2,0x00 ,0x00 ,0x00 ,0x00 ,0x80};
-
 SuccessObuInfoDef SuccessObuInfoStructure[SUCC_MAX];
 
 void RSU_IdleMode(void)

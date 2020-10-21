@@ -19,6 +19,8 @@ uint8_t RevRepFlag = 0;
 
 RX_RingBufDef RX_RingBufStructure;
 
+char RevData = 0;
+
 char const String_ResetDeviceCommand[] = "Reset Device Command!";
 
 
@@ -57,18 +59,18 @@ void USER_USART1_Config(uint32_t baud_rate)
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	USART_Init(USART1,&USART_InitStructure);
 
-//	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
-	USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
+//	USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
 	USART_Cmd(USART1, ENABLE);
 	
-	USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
-	USART_DMACmd(USART1,USART_DMAReq_Rx,ENABLE);
+//	USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
+//	USART_DMACmd(USART1,USART_DMAReq_Rx,ENABLE);
 	
 	USART_GetFlagStatus(USART1, USART_FLAG_TC);						//解决第一字节丢失现象
 
-	DMA_USART1_Config_SendMode();
-	DMA_USART1_Config_ReceiveMode();
+//	DMA_USART1_Config_SendMode();
+//	DMA_USART1_Config_ReceiveMode();
 }
 
 

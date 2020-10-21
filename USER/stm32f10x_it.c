@@ -23,6 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+#include "shell_port.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -192,26 +193,33 @@ void DMA1_Channel5_IRQHandler(void)
 
 void USART1_IRQHandler(void)
 {	
-	if(USART_GetITStatus(USART1, USART_IT_IDLE) == SET) 
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) == SET) 
 	{     
-		USART_IdleClear = USART1->SR;								//序列清空闲标志位
-		USART_IdleClear = USART1->DR;								//序列清空闲标志位
-																	//读出值没有用
-		
-//		RX_RingBuf_Init();
-		USART1_ReceiveDataCount = RING_DATA_SIZE - DMA1_Channel5->CNDTR;	
-		RX_RingBuf_WriteBuf(USART1_ReceiveBuff,USART1_ReceiveDataCount);
-		
-		if(!strncmp((const char *)USART1_ReceiveBuff,String_ResetDeviceCommand,strlen(String_ResetDeviceCommand)))
-		{
-			SoftResetFlag = 1;
-		}
-		
-		DMA_Cmd (DMA1_Channel5,DISABLE);
-		DMA1_Channel5->CMAR = (uint32_t)USART1_ReceiveBuff;
-		DMA1_Channel5->CNDTR = RING_DATA_SIZE;
-		DMA_Cmd (DMA1_Channel5,ENABLE);
+		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
+		RevData = USART1->DR & (uint16_t)0x01FF;
+		shellHandler(&shell, RevData);
 	}
+	
+//	if(USART_GetITStatus(USART1, USART_IT_IDLE) == SET) 
+//	{     
+//		USART_IdleClear = USART1->SR;								//序列清空闲标志位
+//		USART_IdleClear = USART1->DR;								//序列清空闲标志位
+//																	//读出值没有用
+//		
+////		RX_RingBuf_Init();
+//		USART1_ReceiveDataCount = RING_DATA_SIZE - DMA1_Channel5->CNDTR;	
+//		RX_RingBuf_WriteBuf(USART1_ReceiveBuff,USART1_ReceiveDataCount);
+//		
+//		if(!strncmp((const char *)USART1_ReceiveBuff,String_ResetDeviceCommand,strlen(String_ResetDeviceCommand)))
+//		{
+//			SoftResetFlag = 1;
+//		}
+//		
+//		DMA_Cmd (DMA1_Channel5,DISABLE);
+//		DMA1_Channel5->CMAR = (uint32_t)USART1_ReceiveBuff;
+//		DMA1_Channel5->CNDTR = RING_DATA_SIZE;
+//		DMA_Cmd (DMA1_Channel5,ENABLE);
+//	}
 }
 
 /*******************************************************************************

@@ -21,7 +21,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x.h"
-
+#include "shell_port.h"
 
 /*******************************************************************************
 *
@@ -48,7 +48,7 @@ void USER_GPIO_Init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE);
 	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;							//RF_VCC
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -103,6 +103,7 @@ void USER_Beep(void)
 		Delay50us(4);
 	}	
 }
+SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), USER_Beep, USER_Beep, test);
 
 void  BSP_Init (void)
 {		
@@ -115,7 +116,8 @@ void  BSP_Init (void)
 	
 	USER_GPIO_Init();
 
-	USER_USART1_Config(115200);
+	USER_Beep();
+	USER_USART1_Config(9600);
 	USER_USART3_Config(460800);
 	
 	USER_NVIC_Config();
@@ -126,6 +128,7 @@ int main(void)
 //	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x4000);			//中断向量映射
 	
 	BSP_Init();
+	userShellInit();
 	USER_Variable_Init();												//变量初始化
 	
 	log_title("Start");
@@ -140,6 +143,8 @@ int main(void)
 				PC_DataProcess();//处理串口数据
 			}			
 		}
+//		shellTask(&shell);
+//		shellHandler(&shell, RevData);
 		RSU_WorkMode(RSU_CurrentMode);
 	}
 }

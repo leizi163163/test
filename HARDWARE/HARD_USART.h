@@ -37,6 +37,8 @@ extern uint8_t RevRepFlag;
 
 extern RX_RingBufDef RX_RingBufStructure;
 
+extern char RevData;
+
 extern char const String_ResetDeviceCommand[];
 
 
