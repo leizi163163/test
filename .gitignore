@@ -1,0 +1,7 @@
+/Output/
+/Listing/
+*.Administrator
+*.scvd
+*.uvoptx
+**/DebugConfig/
+JLinkLog.txt
