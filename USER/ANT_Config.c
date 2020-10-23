@@ -6,6 +6,7 @@ uint8_t AntSwitchCloseFlag = 0;				//ÌìÏß¹Ø±Õ±êÖ¾Î»,RSUµ±Ç°Õý´¦ÓÚ½»Ò×»ò±êÊ¶Á÷³ÌÊ
 uint8_t CurrentObuId[4] = {0};
 //uint8_t SuccessObuId[5][4] = {0};
 uint8_t SuccIndex = 4;
+SHELL_EXPORT_VAR(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_VAR_INT), SuccIndex, &SuccIndex, test);
 uint8_t BstFlag = 0;
 uint8_t chanCmd = 0;    					// Í¨µÀÖ¸Áî
 uint8_t RsuIdFlag = 0;

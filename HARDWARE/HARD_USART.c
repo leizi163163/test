@@ -1,5 +1,6 @@
 
 #include "stm32f10x.h"
+#include "shell_port.h"
 
 uint16_t USART_IdleClear;
 
@@ -59,20 +60,20 @@ void USER_USART1_Config(uint32_t baud_rate)
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	USART_Init(USART1,&USART_InitStructure);
 
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+//	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
-//	USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
+	USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
 	USART_Cmd(USART1, ENABLE);
 	
 //	USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
-//	USART_DMACmd(USART1,USART_DMAReq_Rx,ENABLE);
+	USART_DMACmd(USART1,USART_DMAReq_Rx,ENABLE);
 	
 	USART_GetFlagStatus(USART1, USART_FLAG_TC);						//解决第一字节丢失现象
 
 //	DMA_USART1_Config_SendMode();
-//	DMA_USART1_Config_ReceiveMode();
+	DMA_USART1_Config_ReceiveMode();
 }
-
+SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC), USER_USART1_Config, USER_USART1_Config, test);
 
 /*******************************************************************************
 *

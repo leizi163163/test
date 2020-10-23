@@ -117,7 +117,7 @@ void  BSP_Init (void)
 	USER_GPIO_Init();
 
 	USER_Beep();
-	USER_USART1_Config(9600);
+	USER_USART1_Config(460800);
 	USER_USART3_Config(460800);
 	
 	USER_NVIC_Config();
@@ -135,17 +135,15 @@ int main(void)
 	
 	while (1)
 	{
-		if(RX_RingBufStructure.Length > 6)								//待处理数据大于6字节才处理
+		if(ReceiveOverFlag == 1)								//待处理数据大于6字节才处理
 		{
-			if(PC_DataParse() == 0)
+			ReceiveOverFlag = 0;
+			uint8_t i;
+			for(i = 0; i < USART1_ReceiveDataCount; i++)
 			{
-				log_hex("Rsu Rx: ",(uint8_t *)&DataFrameBuff,DataFrameCount);
-				PC_DataProcess();//处理串口数据
-			}			
+				shellHandler(&shell, USART1_ReceiveBuff[i]);
+			}
 		}
-//		shellTask(&shell);
-//		shellHandler(&shell, RevData);
-		RSU_WorkMode(RSU_CurrentMode);
 	}
 }
 

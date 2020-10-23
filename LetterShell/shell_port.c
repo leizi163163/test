@@ -29,7 +29,6 @@ void userShellWrite(char data)
 	USART_ClearFlag(USART1,USART_FLAG_TC);
 }
 
-
 /**
  * @brief 用户shell读
  * 
